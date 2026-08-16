@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f6f7fb;
+  --foreground: #172033;
 }
 
 @theme inline {
@@ -12,15 +12,50 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+::selection { background: #c7d2fe; color: #172033; }
+
+.dashboard-shell {
+  background-image: radial-gradient(circle at 88% 0%, rgba(224, 231, 255, .65), transparent 26rem);
+}
+
+.dashboard-enter { animation: dashboard-enter .55s cubic-bezier(.2, .65, .3, 1) both; }
+
+@keyframes dashboard-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.metric-card { transition: transform .24s ease, box-shadow .24s ease, border-color .24s ease; }
+.metric-card:hover { transform: translateY(-3px); border-color: #c7d2fe; box-shadow: 0 16px 34px rgba(30, 41, 59, .08); }
+.metric-icon-indigo { background: #eef2ff; color: #4f46e5; }
+.metric-icon-sky { background: #eff6ff; color: #0284c7; }
+.metric-icon-rose { background: #fff1f2; color: #e11d48; }
+.metric-icon-violet { background: #f5f3ff; color: #7c3aed; }
+
+.dashboard-tabs { border: 0; gap: .25rem; }
+.dashboard-tabs button { border: 0; border-radius: .625rem .625rem 0 0; padding: .6rem .75rem; color: #64748b; }
+.dashboard-tabs button:hover { background: #f8fafc; color: #334155; }
+.dashboard-tabs button.text-blue-600 { background: #eef2ff; color: #4338ca; }
+.dashboard-tab-panel { padding: 0 1.25rem 1.25rem; }
+
+.dashboard-tab-panel table thead { background: #f8fafc; }
+.dashboard-tab-panel table th { padding-top: .85rem; padding-bottom: .85rem; color: #64748b; font-size: .7rem; letter-spacing: .04em; text-transform: uppercase; }
+.dashboard-tab-panel table td { padding-top: .9rem; padding-bottom: .9rem; color: #475569; }
+.dashboard-tab-panel table tr { border-color: #f1f5f9; transition: background-color .18s ease; }
+.dashboard-tab-panel table tr:hover { background: #fafbff; }
+.dashboard-tab-panel > div > div.rounded-lg { margin: 1.25rem 0; border-color: #dbeafe; background: #fafcff; color: #64748b; }
+
+@media (max-width: 767px) {
+  .dashboard-sidebar nav::-webkit-scrollbar { display: none; }
+  .dashboard-sidebar nav { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }

@@ -13,12 +13,5 @@ function DashboardLoading() {
 }
 
 export default function DashboardPage() {
-  return (
-    <div>
-      <h1 className="text-4xl font-bold text-gray-900 mb-8">Dashboard</h1>
-      <Suspense fallback={<DashboardLoading />}>
-        <DashboardContent />
-      </Suspense>
-    </div>
-  )
+  return <div className="dashboard-page"><Suspense fallback={<DashboardLoading />}><DashboardContent /></Suspense></div>
 }

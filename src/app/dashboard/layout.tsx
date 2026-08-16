@@ -6,10 +6,10 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-slate-50 text-slate-900">
+    <div className="dashboard-shell flex min-h-screen flex-col bg-[#f6f7fb] text-slate-900 md:flex-row">
       <Sidebar />
-      <main className="flex-1 overflow-y-auto">
-        <div className="max-w-7xl mx-auto p-8">{children}</div>
+      <main className="min-w-0 flex-1 overflow-y-auto">
+        <div className="mx-auto w-full max-w-[1500px] px-5 py-7 sm:px-8 sm:py-10 lg:px-12">{children}</div>
       </main>
     </div>
   );

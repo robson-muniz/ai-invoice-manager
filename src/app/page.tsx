@@ -1,69 +1,102 @@
-import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="min-h-screen flex flex-col">
+      {/* Header */}
+      <header className="border-b bg-white sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+          <div className="text-2xl font-bold text-blue-600">
+            AI Invoice Manager
+          </div>
+          <nav className="flex items-center gap-6">
+            <Link href="/pricing" className="text-gray-600 hover:text-gray-900">
+              Pricing
+            </Link>
+            <Link
+              href="/login"
+              className="text-gray-600 hover:text-gray-900"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              Sign In
+            </Link>
+            <Link
+              href="/register"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              Get Started
+            </Link>
+          </nav>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </header>
+
+      {/* Hero Section */}
+      <main className="flex-1">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="text-center">
+            <h1 className="text-5xl font-bold text-gray-900 mb-6">
+              Professional Invoicing Made Simple
+            </h1>
+            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+              Create and send professional invoices in minutes. Track payments,
+              manage customers, and get paid faster with AI-powered insights.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Link
+                href="/register"
+                className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 font-medium"
+              >
+                Start Free Trial
+              </Link>
+              <Link
+                href="/pricing"
+                className="border border-gray-300 text-gray-900 px-8 py-3 rounded-lg hover:bg-gray-50 font-medium"
+              >
+                View Pricing
+              </Link>
+            </div>
+          </div>
+
+          {/* Features */}
+          <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="text-center">
+              <div className="text-4xl mb-4">📄</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Professional Invoices
+              </h3>
+              <p className="text-gray-600">
+                Create beautiful, branded invoices in seconds
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl mb-4">🤖</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                AI Assistance
+              </h3>
+              <p className="text-gray-600">
+                Let AI help you describe services and suggest items
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl mb-4">💰</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Get Paid Faster
+              </h3>
+              <p className="text-gray-600">
+                Accept payments and track payment status effortlessly
+              </p>
+            </div>
+          </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="border-t bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <p className="text-center text-gray-600 text-sm">
+            © 2024 AI Invoice Manager. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

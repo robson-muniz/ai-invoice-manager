@@ -1,0 +1,334 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// AUTHENTICATION & USERS
+// ============================================================================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String?
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  accounts      Account[]
+  sessions      Session[]
+  memberships   OrganizationMember[]
+  auditLogs     AuditLog[]
+
+  @@index([email])
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.Text
+  access_token       String?  @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ============================================================================
+// MULTI-TENANT: ORGANIZATIONS & MEMBERS
+// ============================================================================
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  logoUrl   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  members          OrganizationMember[]
+  customers        Customer[]
+  products         Product[]
+  invoices         Invoice[]
+  payments         Payment[]
+  subscriptions    Subscription[]
+  recurringInvoices RecurringInvoice[]
+  auditLogs        AuditLog[]
+
+  @@index([slug])
+}
+
+model OrganizationMember {
+  id             String   @id @default(cuid())
+  organizationId String
+  userId         String
+  role           String   @default("MEMBER") // OWNER, ADMIN, MEMBER
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([userId])
+}
+
+// ============================================================================
+// BUSINESS ENTITIES: CUSTOMERS & PRODUCTS
+// ============================================================================
+
+model Customer {
+  id           String   @id @default(cuid())
+  organizationId String
+  name         String
+  company      String?
+  email        String
+  phone        String?
+  address      String?
+  city         String?
+  postalCode   String?
+  country      String?
+  taxNumber    String?
+  notes        String?
+  deletedAt    DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  invoices     Invoice[]
+  recurringInvoices RecurringInvoice[]
+
+  @@unique([organizationId, email])
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+
+model Product {
+  id           String   @id @default(cuid())
+  organizationId String
+  name         String
+  description  String?
+  sku          String?
+  unitPrice    Int      // Stored in cents
+  taxRate      Int      @default(0) // Basis points (10000 = 100%)
+  currency     String   @default("USD")
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  invoiceItems InvoiceItem[]
+  recurringInvoiceItems RecurringInvoiceItem[]
+
+  @@unique([organizationId, sku])
+  @@index([organizationId])
+}
+
+// ============================================================================
+// INVOICING: INVOICES & ITEMS
+// ============================================================================
+
+model Invoice {
+  id             String   @id @default(cuid())
+  organizationId String
+  customerId     String
+  invoiceNumber  String   // Format: INV-000001
+  status         String   @default("DRAFT") // DRAFT, SENT, VIEWED, PARTIALLY_PAID, PAID, OVERDUE, CANCELLED
+  issueDate      DateTime
+  dueDate        DateTime
+  subtotalAmount Int      // Cents
+  discountAmount Int      @default(0) // Cents
+  discountType   String?  // PERCENTAGE or FIXED
+  discountValue  Int?     // Percentage (0-10000) or fixed amount in cents
+  taxAmount      Int      @default(0) // Cents
+  totalAmount    Int      // Cents
+  paidAmount     Int      @default(0) // Cents
+  currency       String   @default("USD")
+  notes          String?
+  viewedAt       DateTime?
+  sentAt         DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer     Customer     @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  items        InvoiceItem[]
+  payments     Payment[]
+  reminders    InvoiceReminder[]
+
+  @@unique([organizationId, invoiceNumber])
+  @@index([organizationId])
+  @@index([customerId])
+  @@index([status])
+  @@index([dueDate])
+}
+
+model InvoiceItem {
+  id           String @id @default(cuid())
+  invoiceId    String
+  productId    String? // Nullable for custom line items
+  description  String
+  quantity     Decimal // Support fractional units
+  unitPrice    Int    // Cents
+  taxRate      Int    @default(0) // Basis points
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([invoiceId])
+}
+
+// ============================================================================
+// PAYMENTS & SUBSCRIPTIONS
+// ============================================================================
+
+model Payment {
+  id             String   @id @default(cuid())
+  organizationId String
+  invoiceId      String
+  amount         Int      // Cents
+  paymentMethod  String   // STRIPE, BANK_TRANSFER, CASH, CHECK
+  paymentDate    DateTime
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  invoice      Invoice      @relation(fields: [invoiceId], references: [id], onDelete: Restrict)
+
+  @@index([organizationId])
+  @@index([invoiceId])
+}
+
+model Subscription {
+  id                  String   @id @default(cuid())
+  organizationId      String   @unique
+  stripeCustomerId    String?
+  stripeSubscriptionId String?
+  plan                String   @default("FREE") // FREE, PRO
+  status              String   @default("ACTIVE") // ACTIVE, INACTIVE, CANCELLED
+  currentPeriodStart  DateTime?
+  currentPeriodEnd    DateTime?
+  cancelAtPeriodEnd   Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([stripeSubscriptionId])
+}
+
+// ============================================================================
+// RECURRING INVOICES
+// ============================================================================
+
+model RecurringInvoice {
+  id             String   @id @default(cuid())
+  organizationId String
+  customerId     String
+  frequency      String   // MONTHLY, QUARTERLY, YEARLY
+  nextInvoiceDate DateTime
+  lastInvoiceDate DateTime?
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer     Customer     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  items        RecurringInvoiceItem[]
+
+  @@index([organizationId])
+  @@index([nextInvoiceDate])
+}
+
+model RecurringInvoiceItem {
+  id                  String  @id @default(cuid())
+  recurringInvoiceId  String
+  productId           String?
+  description         String
+  quantity            Decimal
+  unitPrice           Int
+  taxRate             Int     @default(0)
+
+  recurringInvoice RecurringInvoice @relation(fields: [recurringInvoiceId], references: [id], onDelete: Cascade)
+  product          Product?          @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([recurringInvoiceId])
+}
+
+// ============================================================================
+// INVOICE REMINDERS
+// ============================================================================
+
+model InvoiceReminder {
+  id         String   @id @default(cuid())
+  invoiceId  String
+  type       String   // PAYMENT_DUE, OVERDUE
+  sentAt     DateTime?
+  createdAt  DateTime @default(now())
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
+}
+
+// ============================================================================
+// AUDIT LOG
+// ============================================================================
+
+model AuditLog {
+  id             String   @id @default(cuid())
+  organizationId String
+  userId         String
+  entityType     String   // CUSTOMER, INVOICE, PAYMENT, SUBSCRIPTION
+  entityId       String
+  action         String   // CREATE, UPDATE, DELETE, SEND, VIEW
+  changes        Json?    // Before/after values
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([entityType])
+  @@index([createdAt])
+}

@@ -4,13 +4,17 @@ import { hash } from "bcryptjs";
 const seed = async () => {
   console.log("🌱 Starting seed...");
 
+  // Keep the credentials advertised on the login page valid even when this
+  // script is run against a database that already contains the demo user.
+  const demoPasswordHash = await hash("demo123456", 10);
+
   // Create test user
   const user = await db.user.upsert({
     where: { email: "demo@example.com" },
-    update: {},
+    update: { passwordHash: demoPasswordHash },
     create: {
       email: "demo@example.com",
-      passwordHash: await hash("demo123456", 10), // Demo password: demo123456
+      passwordHash: demoPasswordHash,
     },
   });
 
@@ -62,8 +66,18 @@ const seed = async () => {
   console.log("✓ Created test customer:", customer.name);
 
   // Create test products
-  await db.product.create({
-    data: {
+  await db.product.upsert({
+    where: {
+      organizationId_sku: { organizationId: org.id, sku: "WEB-DEV-001" },
+    },
+    update: {
+      name: "Web Development",
+      description: "Professional web development services",
+      unitPrice: 15000,
+      taxRate: 1000,
+      currency: "USD",
+    },
+    create: {
       organizationId: org.id,
       name: "Web Development",
       description: "Professional web development services",
@@ -74,8 +88,18 @@ const seed = async () => {
     },
   });
 
-  await db.product.create({
-    data: {
+  await db.product.upsert({
+    where: {
+      organizationId_sku: { organizationId: org.id, sku: "MAINT-001" },
+    },
+    update: {
+      name: "Maintenance",
+      description: "Monthly maintenance services",
+      unitPrice: 5000,
+      taxRate: 1000,
+      currency: "USD",
+    },
+    create: {
       organizationId: org.id,
       name: "Maintenance",
       description: "Monthly maintenance services",
@@ -89,8 +113,10 @@ const seed = async () => {
   console.log("✓ Created test products");
 
   // Create test subscription (Free plan)
-  await db.subscription.create({
-    data: {
+  await db.subscription.upsert({
+    where: { organizationId: org.id },
+    update: { plan: "FREE", status: "ACTIVE" },
+    create: {
       organizationId: org.id,
       plan: "FREE",
       status: "ACTIVE",

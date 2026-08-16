@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createInvoiceSchema } from "@/server/validators/invoiceSchemas";
 import { useInvoices, useCustomers, useProducts } from "@/lib/hooks";
@@ -63,6 +63,18 @@ export function InvoiceForm({
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [localError, setLocalError] = useState<string | null>(null);
+  const [defaultValues] = useState<InvoiceFormData>(() => ({
+    ...initialData,
+    organizationId,
+    customerId: initialData?.customerId ?? "",
+    issueDate: initialData?.issueDate ?? new Date(),
+    dueDate: initialData?.dueDate ?? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    items: initialData?.items ?? [{ productId: "", description: "", quantity: 1, unitPrice: 0, taxRate: 1000 }],
+    discountType: initialData?.discountType ?? "PERCENTAGE",
+    discountValue: initialData?.discountValue ?? 0,
+    currency: initialData?.currency ?? "USD",
+    notes: initialData?.notes ?? "",
+  }));
 
   useEffect(() => {
     const load = async () => {
@@ -81,24 +93,15 @@ export function InvoiceForm({
   }, [listCustomers, listProducts]);
 
   const form = useForm<InvoiceFormData>({
-    resolver: zodResolver(createInvoiceSchema) as any,
-    defaultValues: (initialData as any) || {
-      organizationId,
-      customerId: "",
-      issueDate: new Date(),
-      dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-      items: [{ productId: "", description: "", quantity: 1, unitPrice: 0, taxRate: 1000 }],
-      discountType: "PERCENTAGE",
-      discountValue: 0,
-      currency: "USD",
-      notes: "",
-    },
+    resolver: zodResolver(createInvoiceSchema),
+    defaultValues,
   });
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "items",
   });
+  const discountType = useWatch({ control: form.control, name: "discountType" });
 
   const onSubmit = useCallback(
     async (data: InvoiceFormData) => {
@@ -163,30 +166,6 @@ export function InvoiceForm({
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="paymentMethod"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Payment Method *</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="BANK_TRANSFER">Bank Transfer</SelectItem>
-                    <SelectItem value="CREDIT_CARD">Credit Card</SelectItem>
-                    <SelectItem value="CHECK">Check</SelectItem>
-                    <SelectItem value="CASH">Cash</SelectItem>
-                    <SelectItem value="OTHER">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
@@ -197,7 +176,12 @@ export function InvoiceForm({
               <FormItem>
                 <FormLabel>Issue Date *</FormLabel>
                 <FormControl>
-                  <Input type="date" {...field} />
+                  <Input
+                    type="date"
+                    {...field}
+                    value={field.value.toISOString().slice(0, 10)}
+                    onChange={(event) => field.onChange(new Date(event.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -211,7 +195,12 @@ export function InvoiceForm({
               <FormItem>
                 <FormLabel>Due Date *</FormLabel>
                 <FormControl>
-                  <Input type="date" {...field} />
+                  <Input
+                    type="date"
+                    {...field}
+                    value={field.value.toISOString().slice(0, 10)}
+                    onChange={(event) => field.onChange(new Date(event.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -258,7 +247,7 @@ export function InvoiceForm({
                             field.onChange(value);
                             handleAddProduct(index, value);
                           }}
-                          defaultValue={field.value}
+                          defaultValue={field.value ?? undefined}
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -396,7 +385,7 @@ export function InvoiceForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Discount Value {form.watch("discountType") === "PERCENTAGE" ? "(bp)" : "(cents)"}
+                  Discount Value {discountType === "PERCENTAGE" ? "(bp)" : "(cents)"}
                 </FormLabel>
                 <FormControl>
                   <Input

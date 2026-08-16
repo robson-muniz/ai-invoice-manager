@@ -12,7 +12,7 @@ import { Plus, ArrowLeft, Loader2 } from "lucide-react";
 export default function InvoicesPage() {
   const { organizationId, isLoading } = useOrganization();
   const [view, setView] = useState<"list" | "create" | "detail">("list");
-  const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
+  const [selectedInvoice, setSelectedInvoice] = useState<{ id: string } | null>(null);
 
   if (isLoading) {
     return (

@@ -11,7 +11,7 @@ import { Plus, ArrowLeft, Loader2 } from "lucide-react";
 export default function ProductsPage() {
   const { organizationId, isLoading } = useOrganization();
   const [view, setView] = useState<"list" | "create" | "edit">("list");
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [selectedProduct, setSelectedProduct] = useState<{ id: string } | null>(null);
 
   if (isLoading) {
     return (

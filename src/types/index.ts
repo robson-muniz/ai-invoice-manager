@@ -1,4 +1,5 @@
 import type { DefaultSession } from "next-auth";
+import type { DefaultJWT } from "next-auth/jwt";
 
 // Extend NextAuth session with custom fields
 declare module "next-auth" {
@@ -7,11 +8,20 @@ declare module "next-auth" {
       id: string;
       email: string;
     } & DefaultSession["user"];
+    organizationId?: string;
+    organizationRole?: string;
   }
 
   interface User {
     id: string;
     email: string;
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT extends DefaultJWT {
+    organizationId?: string;
+    organizationRole?: string;
   }
 }
 

@@ -37,7 +37,7 @@ function LoginForm() {
         router.push(callbackUrl);
         router.refresh();
       }
-    } catch (err) {
+    } catch {
       setError("An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
@@ -104,7 +104,7 @@ function LoginForm() {
 
       <div className="mt-6 text-center">
         <p className="text-gray-600">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link href="/register" className="text-blue-600 hover:underline">
             Register
           </Link>

@@ -82,12 +82,8 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = token["id"] as string;
         // Propagate organization context to the session
-        (session as any).organizationId = token["organizationId"] as
-          | string
-          | undefined;
-        (session as any).organizationRole = token["organizationRole"] as
-          | string
-          | undefined;
+        session.organizationId = token.organizationId;
+        session.organizationRole = token.organizationRole;
       }
       return session;
     },

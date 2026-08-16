@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { hash } from "bcryptjs";
 import { z } from "zod";
 import { db } from "@/server/db";
+import { Prisma } from "@prisma/client";
 
 const registerSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -57,7 +58,7 @@ export async function POST(req: NextRequest) {
       : slug;
 
     // Create user + organization + membership atomically
-    await db.$transaction(async (tx: any) => {
+    await db.$transaction(async (tx: Prisma.TransactionClient) => {
       const user = await tx.user.create({
         data: {
           email: validated.email,

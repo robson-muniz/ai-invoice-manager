@@ -84,12 +84,14 @@ export async function verifyResourceOwnership(
   await requireOrganizationAccess(organizationId);
 
   // Then verify resource belongs to that organization
-  const resource = await (db as any)[table].findFirst({
-    where: {
-      id: resourceId,
-      organizationId,
-    },
-  });
+  const where = { id: resourceId, organizationId };
+  const resource = await {
+    customer: () => db.customer.findFirst({ where }),
+    invoice: () => db.invoice.findFirst({ where }),
+    product: () => db.product.findFirst({ where }),
+    payment: () => db.payment.findFirst({ where }),
+    subscription: () => db.subscription.findFirst({ where }),
+  }[table]();
 
   if (!resource) {
     throw new NotFoundError(

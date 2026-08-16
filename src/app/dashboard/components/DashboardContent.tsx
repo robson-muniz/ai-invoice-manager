@@ -18,6 +18,13 @@ interface MetricsData {
   customerCount: number
 }
 
+interface DashboardInvoice {
+  totalAmount?: number
+  total?: number
+  paidAmount?: number
+  status: string
+}
+
 export function DashboardContent() {
   const { organizationId } = useOrganization()
   const [metrics, setMetrics] = useState<MetricsData>({
@@ -52,7 +59,7 @@ export function DashboardContent() {
         let overdue = 0
 
         if (invoices && Array.isArray(invoices)) {
-          invoices.forEach((invoice: any) => {
+          invoices.forEach((invoice: DashboardInvoice) => {
             const amount = invoice.totalAmount ?? invoice.total ?? 0
             const paid = invoice.paidAmount || 0
 

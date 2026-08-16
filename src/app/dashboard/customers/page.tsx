@@ -11,7 +11,7 @@ import { Plus, ArrowLeft, Loader2 } from "lucide-react";
 export default function CustomersPage() {
   const { organizationId, isLoading } = useOrganization();
   const [view, setView] = useState<"list" | "create" | "edit">("list");
-  const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<{ id: string } | null>(null);
 
   if (isLoading) {
     return (

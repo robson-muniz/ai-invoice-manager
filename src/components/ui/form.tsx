@@ -5,6 +5,9 @@ import {
   FormProvider,
   useFormContext,
   Controller,
+  type Control,
+  type ControllerFieldState,
+  type ControllerRenderProps,
   FieldPath,
 } from "react-hook-form"
 
@@ -26,13 +29,13 @@ interface FormFieldProps<
   TName extends FieldPath<TFieldValues>
 > {
   name: TName
-  control: any
+  control: Control<TFieldValues>
   render: ({
     field,
     fieldState,
   }: {
-    field: any
-    fieldState: any
+    field: ControllerRenderProps<TFieldValues, TName>
+    fieldState: ControllerFieldState
   }) => React.ReactElement
 }
 

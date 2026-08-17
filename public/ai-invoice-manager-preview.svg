@@ -1,0 +1,57 @@
+<svg width="1600" height="950" viewBox="0 0 1600 950" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1600" height="950" rx="28" fill="#F8FAFC"/>
+<rect x="40" y="40" width="1520" height="870" rx="22" fill="white" stroke="#E2E8F0" stroke-width="2"/>
+<rect x="40" y="40" width="1520" height="82" rx="22" fill="#FFFFFF"/>
+<path d="M40 122H1560" stroke="#E2E8F0" stroke-width="2"/>
+<circle cx="83" cy="81" r="18" fill="#2563EB"/>
+<path d="M75 81L81 87L93 74" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="116" y="89" fill="#0F172A" font-family="Arial, sans-serif" font-size="27" font-weight="700">AI Invoice Manager</text>
+<text x="1210" y="87" fill="#64748B" font-family="Arial, sans-serif" font-size="18">Dashboard</text>
+<rect x="1340" y="59" width="150" height="44" rx="12" fill="#2563EB"/>
+<text x="1372" y="87" fill="white" font-family="Arial, sans-serif" font-size="17" font-weight="700">New Invoice</text>
+<text x="95" y="178" fill="#0F172A" font-family="Arial, sans-serif" font-size="36" font-weight="700">Good morning 👋</text>
+<text x="95" y="211" fill="#64748B" font-family="Arial, sans-serif" font-size="18">Manage invoices, customers and payments from one place.</text>
+<rect x="95" y="252" width="330" height="150" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+<text x="120" y="286" fill="#64748B" font-family="Arial, sans-serif" font-size="16">Total Revenue</text>
+<text x="120" y="337" fill="#0F172A" font-family="Arial, sans-serif" font-size="35" font-weight="700">€24,680.00</text>
+<text x="120" y="373" fill="#16A34A" font-family="Arial, sans-serif" font-size="15">↑ 12.8% this month</text>
+<rect x="445" y="252" width="330" height="150" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+<text x="470" y="286" fill="#64748B" font-family="Arial, sans-serif" font-size="16">Outstanding</text>
+<text x="470" y="337" fill="#0F172A" font-family="Arial, sans-serif" font-size="35" font-weight="700">€6,420.00</text>
+<text x="470" y="373" fill="#F59E0B" font-family="Arial, sans-serif" font-size="15">18 invoices awaiting payment</text>
+<rect x="795" y="252" width="330" height="150" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+<text x="820" y="286" fill="#64748B" font-family="Arial, sans-serif" font-size="16">Paid Invoices</text>
+<text x="820" y="337" fill="#0F172A" font-family="Arial, sans-serif" font-size="35" font-weight="700">142</text>
+<text x="820" y="373" fill="#16A34A" font-family="Arial, sans-serif" font-size="15">+24 this month</text>
+<rect x="1145" y="252" width="370" height="150" rx="18" fill="#EFF6FF" stroke="#BFDBFE"/>
+<text x="1170" y="286" fill="#1D4ED8" font-family="Arial, sans-serif" font-size="16" font-weight="700">AI Assistant</text>
+<text x="1170" y="320" fill="#1E3A8A" font-family="Arial, sans-serif" font-size="17">Generate descriptions,</text>
+<text x="1170" y="346" fill="#1E3A8A" font-family="Arial, sans-serif" font-size="17">items and invoice insights.</text>
+<rect x="95" y="438" width="1420" height="370" rx="18" fill="white" stroke="#E2E8F0"/>
+<text x="120" y="480" fill="#0F172A" font-family="Arial, sans-serif" font-size="22" font-weight="700">Recent Invoices</text>
+<text x="1370" y="480" fill="#2563EB" font-family="Arial, sans-serif" font-size="16" font-weight="700">View all →</text>
+<path d="M120 507H1490" stroke="#E2E8F0"/>
+<text x="120" y="543" fill="#94A3B8" font-family="Arial, sans-serif" font-size="14">INVOICE</text>
+<text x="340" y="543" fill="#94A3B8" font-family="Arial, sans-serif" font-size="14">CUSTOMER</text>
+<text x="690" y="543" fill="#94A3B8" font-family="Arial, sans-serif" font-size="14">DATE</text>
+<text x="910" y="543" fill="#94A3B8" font-family="Arial, sans-serif" font-size="14">AMOUNT</text>
+<text x="1160" y="543" fill="#94A3B8" font-family="Arial, sans-serif" font-size="14">STATUS</text>
+<text x="120" y="590" fill="#0F172A" font-family="Arial, sans-serif" font-size="16" font-weight="700">#INV-1048</text>
+<text x="340" y="590" fill="#334155" font-family="Arial, sans-serif" font-size="16">Acme Studio</text>
+<text x="690" y="590" fill="#64748B" font-family="Arial, sans-serif" font-size="16">Aug 16, 2026</text>
+<text x="910" y="590" fill="#0F172A" font-family="Arial, sans-serif" font-size="16" font-weight="700">€1,280.00</text>
+<rect x="1160" y="568" width="88" height="30" rx="15" fill="#DCFCE7"/><text x="1182" y="589" fill="#15803D" font-family="Arial, sans-serif" font-size="13" font-weight="700">Paid</text>
+<path d="M120 620H1490" stroke="#F1F5F9"/>
+<text x="120" y="661" fill="#0F172A" font-family="Arial, sans-serif" font-size="16" font-weight="700">#INV-1047</text>
+<text x="340" y="661" fill="#334155" font-family="Arial, sans-serif" font-size="16">Northstar Labs</text>
+<text x="690" y="661" fill="#64748B" font-family="Arial, sans-serif" font-size="16">Aug 15, 2026</text>
+<text x="910" y="661" fill="#0F172A" font-family="Arial, sans-serif" font-size="16" font-weight="700">€2,450.00</text>
+<rect x="1160" y="639" width="108" height="30" rx="15" fill="#FEF3C7"/><text x="1178" y="660" fill="#B45309" font-family="Arial, sans-serif" font-size="13" font-weight="700">Pending</text>
+<path d="M120 691H1490" stroke="#F1F5F9"/>
+<text x="120" y="732" fill="#0F172A" font-family="Arial, sans-serif" font-size="16" font-weight="700">#INV-1046</text>
+<text x="340" y="732" fill="#334155" font-family="Arial, sans-serif" font-size="16">Pixel &amp; Co.</text>
+<text x="690" y="732" fill="#64748B" font-family="Arial, sans-serif" font-size="16">Aug 14, 2026</text>
+<text x="910" y="732" fill="#0F172A" font-family="Arial, sans-serif" font-size="16" font-weight="700">€890.00</text>
+<rect x="1160" y="710" width="108" height="30" rx="15" fill="#FEE2E2"/><text x="1178" y="731" fill="#B91C1C" font-family="Arial, sans-serif" font-size="13" font-weight="700">Overdue</text>
+<text x="120" y="862" fill="#94A3B8" font-family="Arial, sans-serif" font-size="14">AI Invoice Manager • Professional invoicing for modern businesses</text>
+</svg>
